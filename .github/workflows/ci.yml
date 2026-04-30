@@ -33,14 +33,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Build Docker image
-        run: |
-          IMAGE=ghcr.io/${{ github.repository_owner }}/quotebook-quotes-app
-          docker build -t ${{ github.sha }}/quotebook-quotes-app .
-          docker tag $IMAGE:${{ github.sha }} $IMAGE:latest
-
-      - name: Push Docker image
-        run: |
-          IMAGE=ghcr.io/${{ github.repository_owner }}/quotebook-quotes-app
-          docker push $IMAGE:${{ github.sha }}/quotebook-quotes-app
-          docker push $IMAGE:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}-quotes-app:latest
+            ghcr.io/${{ github.repository }}-quotes-app:${{ github.sha }}
