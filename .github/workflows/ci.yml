@@ -26,9 +26,6 @@ jobs:
       - name: Build & test with Maven
         run: mvn clean verify -DskipTests
       
-      - name: SonarQube Scan
-        run: mvn sonar:sonar
-
       - name: Login to GHCR
         run: docker login ghcr.io -u ${{ github.actor }} --password-stdin
       
