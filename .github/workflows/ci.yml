@@ -17,6 +17,10 @@ jobs:
         image: sonarqube:lts-community
         ports:
           - 9000:9000
+        env:
+          SONAR_JDBC_USERNAME: sonar
+          SONAR_JDBC_PASSWORD: admin
+          SONAR_LOG_LEVEL: "INFO"
 
     steps:
       - name: Checkout code
@@ -43,7 +47,7 @@ jobs:
           mvn clean verify sonar:sonar \
             -DskipTests \  
             -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=admin \
+            -Dsonar.login=sonar \
             -Dsonar.password=admin \
             -Dsonar.qualitygate.wait=true
       
