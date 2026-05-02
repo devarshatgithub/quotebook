@@ -16,7 +16,7 @@ jobs:
       sonarqube:
         image: sonarqube:lts-community
         ports:
-          - 9000:9000
+          - ${{ vars.SONAR_PORT }}:${{ vars.SONAR_PORT }}
 
     steps:
       - name: Checkout code
@@ -32,7 +32,7 @@ jobs:
       
       - name: Check SonarQube Status  
         run: |
-          until curl -s http://localhost:9000/api/system/status | grep -q '"status":"UP"'; do
+          until curl -s http://localhost:${{ vars.SONAR_PORT }}/api/system/status | grep -q '"status":"UP"'; do
             echo "Waiting for SonarQube Status ..."
             sleep 10
           done
@@ -42,9 +42,9 @@ jobs:
         run: |
           mvn clean verify sonar:sonar \
             -DskipTests \
-            -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=admin \
-            -Dsonar.password=admin \
+            -Dsonar.host.url=http://localhost:${{ vars.SONAR_PORT }} \
+            -Dsonar.login=${{ secrets.SONAR_USER }} \
+            -Dsonar.password=${{ secrets.SONAR_PASSWORD }} \
             -Dsonar.qualitygate.wait=true
       
       - name: Log in to GitHub Container Registry
