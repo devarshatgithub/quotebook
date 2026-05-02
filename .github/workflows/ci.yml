@@ -44,7 +44,7 @@ jobs:
             -DskipTests \
             -Dsonar.host.url=http://localhost:${{ vars.SONAR_PORT }} \
             -Dsonar.login=${{ secrets.SONAR_USER }} \
-            -Dsonar.password=${{ secrets.SONAR_PASSWORD }} \
+            -Dsonar.password=${{ secrets.SONAR_PASS }} \
             -Dsonar.qualitygate.wait=true
       
       - name: Log in to GitHub Container Registry
