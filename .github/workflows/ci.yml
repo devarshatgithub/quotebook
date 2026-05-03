@@ -30,7 +30,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       
-      - name: Check SonarQube Status  
+      - name: Check SonarQube status  
         run: |
           until curl -s http://localhost:${{ vars.SONAR_PORT }}/api/system/status | grep -q '"status":"UP"'; do
             echo "Waiting for SonarQube Status ..."
@@ -47,7 +47,7 @@ jobs:
             -Dsonar.password=${{ secrets.SONAR_PASS }} \
             -Dsonar.qualitygate.wait=true
       
-      - name: Log in to GitHub Container Registry
+      - name: Log into GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
