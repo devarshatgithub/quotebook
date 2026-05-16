@@ -3,6 +3,8 @@ package com.example.quotebook.service;
 import java.util.List;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.quotebook.handler.ResourceNotFoundException;
@@ -15,6 +17,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class QuoteService {
     private final QuoteRepository repository;
+    
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     private final Random random = new Random();
 
@@ -33,6 +38,15 @@ public class QuoteService {
             throw new RuntimeException("No quotes available");
         }
         return quotes.get(random.nextInt(quotes.size()));
+    }
+
+    public List<String> getAuthors() {
+        List<String> authors = mongoTemplate.query(Quote.class)
+                                .distinct("author").as(String.class).all();
+        if (authors.isEmpty()) {
+            throw new ResourceNotFoundException("Author list is empty");
+        }
+        return authors;
     }
 
     public List<Quote> getByAuthor(String author) {

@@ -49,7 +49,14 @@ public class QuoteController {
         return QuoteMapper.toDTO(service.getRandomQuote());
     }
 
-    @GetMapping("/author/{author}")
+    @GetMapping("/authors")
+    public List<String> getAuthor() {
+        return service.getAuthors()
+                .stream()
+                .toList();
+    }
+
+    @GetMapping("/authors/{author}")
     public List<QuoteResponseDTO> byAuthor(@PathVariable("author") String author) {
         return service.getByAuthor(author)
                 .stream()

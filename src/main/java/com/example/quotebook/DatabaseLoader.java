@@ -55,7 +55,7 @@ public class DatabaseLoader {
                     "I have two hours today to build an app from scratch. @springboot to the rescue!",
                     "admin", null, null, 4),
 			    new Quote(null,
-                    "@springboot with @springframework is pure productivity! Who said in #java one has to write double the code than in other langs? #ne,wFavLib",
+                    "@springboot with @springframework is pure productivity! Who said in #java one has to write double the code than in other langs?",
                     "admin", null, null, 7)
             );
             repository.saveAll(quotes);
