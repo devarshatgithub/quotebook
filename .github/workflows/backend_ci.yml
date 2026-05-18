@@ -2,15 +2,16 @@ name: Quotes APP
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+    paths-ignore:
+      - 'frontend/**'
 
 permissions:
   contents: write
   packages: write
 
 jobs:
-  build-and-push:
+  backend-build-and-push:
     runs-on: ubuntu-latest
     services:
       sonarqube:
@@ -54,7 +55,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Build and push Docker image
+      - name: Push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
