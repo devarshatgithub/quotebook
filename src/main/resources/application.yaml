@@ -2,7 +2,7 @@ spring:
   application:
     name: quotebook
   mongodb:
-    uri: mongodb://localhost:27017/quotesdb
+    uri: mongodb://mongodb:27017/quotesdb
     database: quotesdb
 
 app:
