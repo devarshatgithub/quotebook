@@ -34,6 +34,11 @@ jobs:
           npm test --if-present
           npm run build
 
+      - name: Versioning
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "WEB_VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Log into GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -49,4 +54,5 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository }}-quotes-web:latest
+            ghcr.io/org/frontend:${{ env.WEB_VERSION }}
             ghcr.io/${{ github.repository }}-quotes-web:${{ github.sha }}
