@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.mongodb.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  serviceName: {{ .Values.mongodb.name }}
+  replicas: {{ .Values.mongodb.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mongodb.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mongodb.name }}
+    spec:
+      containers:
+        - name: {{ .Values.mongodb.name }}
+          image: {{ .Values.mongodb.image }}
+          ports:
+            - containerPort: {{ .Values.mongodb.port }}
+          volumeMounts:
+            - name: {{ .Values.mongodb.storageName }}
+              mountPath: /data/db
+          livenessProbe:
+            exec:
+              command: ["mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command: ["mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Values.mongodb.storageName }}
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.mongodb.storage }}

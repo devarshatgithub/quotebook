@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      containers:
+        - name: {{ .Values.app.name }}
+          image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
+          imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.app.port }}
+          envFrom:
+          - configMapRef:
+              name: quotesapp-config
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: {{ .Values.app.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: {{ .Values.app.port }}
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
