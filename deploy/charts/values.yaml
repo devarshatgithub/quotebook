@@ -2,6 +2,8 @@ namespace: quotes
 
 ingress:
   enabled: true
+  className: haproxy
+  path: /api/quotes
 
 mongodb:
   name: mongodb
