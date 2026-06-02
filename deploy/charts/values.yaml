@@ -20,7 +20,7 @@ app:
     repository: ghcr.io/devarshatgithub/quotebook-quotes-app
     tag: latest
     pullPolicy: IfNotPresent
-  replicas: 2
+  replicas: 1
   port: 8080
 
 resources:

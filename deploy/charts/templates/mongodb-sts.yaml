@@ -22,18 +22,23 @@ spec:
           volumeMounts:
             - name: {{ .Values.mongodb.storageName }}
               mountPath: /data/db
+          startupProbe:
+            exec:
+              command: ["mongosh","--eval" ,"db.runCommand({ ping: 1 })"]
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 15   
           livenessProbe:
             exec:
               command: ["mongosh", "--eval", "db.runCommand({ ping: 1 })"]
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 4
           readinessProbe:
             exec:
               command: ["mongosh", "--eval", "db.runCommand({ ping: 1 })"]
-            initialDelaySeconds: 5
-            periodSeconds: 10
+            periodSeconds: 15
             timeoutSeconds: 5
             successThreshold: 1
             failureThreshold: 3
